@@ -1,7 +1,7 @@
 # codeql-ctf-go-return
 Extension project for the Go and Don't Return CodeQL CTF
 
-This repository is intended for use by contestants in the March 2021 CodeQL CTF. If you are unfamiliar, first read the [https://securitylab.github.com/ctf/go-and-dont-return](contest documentation).
+This repository is intended for use by contestants in the March 2021 CodeQL CTF. If you are unfamiliar, first read the [contest documentation](https://securitylab.github.com/ctf/go-and-dont-return).
 
 This is a set of example programs that exhibit coding mistakes similar to CVE-2020-11012 found in MinIO, but which are in various ways trickier to accurately detect than the original MinIO bug. See the contest documentation linked above for instructions on building a CodeQL database for these examples and identifying bugs in them.
 
