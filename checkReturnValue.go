@@ -108,7 +108,7 @@ func thenBranchGoodInterproceduralError() error {
 func thenBranchBadInterproceduralError() error {
 
 	if errorSource() != ErrNone {
-		// Good: returning nil despite an error
+		// Bad: returning nil despite an error
 		return getNil()
 	}
 	doSomething()
