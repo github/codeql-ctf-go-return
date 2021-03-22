@@ -50,36 +50,112 @@ func someOtherCondition() bool {
 	return true
 }
 
-func logicalAndThenBranchGood() {
+func logicalAndThenBranchSometimesBad() {
 
 	if errorSource() != ErrNone && someOtherCondition() {
-		// Good: in the then-block, where we're certain there has been an error,
-		// we return early. In the other branch an error is possible but not certain. 
+		// Bad: there is a route from a positive error test around the 'return' statement.
 		return
 	}
 	doSomething()
 
 }
 
-func logicalAndThenBranchBad() {
+func logicalAndThenBranchAlwaysBad() {
 
 	if errorSource() != ErrNone && someOtherCondition() {
-		// Bad: in the then-block, where we're certain there has been an error,
-		// we do not return early.
+		// Bad: there is no return statement at all.
 		insteadOfReturn()
 	}
 	doSomething()
 
 }
 
-func logicalAndElseBranchUncertain() {
+func logicalAndElseBranchAlwaysBad2() {
 
 	if errorSource() == ErrNone && someOtherCondition() {
 		doSomething()
 	} else {
-		// Uncertain: an error is not a precondition for entering either branch.
-		// We should be conservative and NOT flag this function as a problem.
+		// Bad: On error we may enter either branch, but neither one returns.
 		insteadOfReturn()
+	}
+	doSomething()
+
+}
+
+func logicalAndThenBranchGood() {
+
+	if someOtherCondition() && errorSource() != ErrNone {
+		// Good: whenever an error is indicated we return.
+		return
+	}
+	doSomething()
+
+}
+
+func logicalAndElseBranchGood() {
+
+	if someOtherCondition() && errorSource() == ErrNone {
+		// Good: whenever an error is indicated we return.
+		doSomething()
+	} else {
+		return
+	}
+
+}
+
+func logicalAndElseBranchGood2() {
+
+	if errorSource() == ErrNone && someOtherCondition() {
+		// Good: whenever an error is indicated we return.
+		doSomething()
+	} else {
+		return
+	}
+	doSomething()
+
+}
+
+func logicalOrElseBranchSometimesBad() {
+
+	if errorSource() == ErrNone || someOtherCondition() {
+		doSomething()
+	} else {
+		// Bad: there is a route from a failing error test that bypasses the return statement.
+		return
+	}
+	doSomething()
+
+}
+
+func logicalOrElseBranchAlwaysBad() {
+
+	if errorSource() == ErrNone || someOtherCondition() {
+		doSomething()
+	} else {
+		// Bad: regardless of error status, we do not return.
+		insteadOfReturn()
+	}
+	doSomething()
+
+}
+
+func logicalOrThenBranchAlwaysBad() {
+
+	if errorSource() != ErrNone || someOtherCondition() {
+		// Bad: regardless of error status, we do not return.
+		insteadOfReturn()
+	} else {
+		doSomething()
+	}
+	doSomething()
+
+}
+
+func logicalOrThenBranchGood() {
+
+	if someOtherCondition() || errorSource() != ErrNone {
+		// Good: whenever an error is indicated we return.
+		return
 	}
 	doSomething()
 
@@ -87,38 +163,20 @@ func logicalAndElseBranchUncertain() {
 
 func logicalOrElseBranchGood() {
 
-	if errorSource() == ErrNone || someOtherCondition() {
+	if someOtherCondition() || errorSource() == ErrNone {
+		// Good: whenever an error is indicated we return.
 		doSomething()
 	} else {
-		// Good: in the else-block, where we're certain there has been an error,
-		// we return early. In the other branch an error is possible but not certain. 
 		return
 	}
-	doSomething()
 
 }
 
-func logicalOrElseBranchBad() {
-
-	if errorSource() == ErrNone || someOtherCondition() {
-		doSomething()
-	} else {
-		// Bad: in the else-block, where we're certain there has been an error,
-		// we do not return early.
-		insteadOfReturn()
-	}
-	doSomething()
-
-}
-
-func logicalOrThenBranchUncertain() {
+func logicalOrThenBranchGood2() {
 
 	if errorSource() != ErrNone || someOtherCondition() {
-		// Uncertain: an error is not a precondition for entering either branch.
-		// We should be conservative and NOT flag this function as a problem.
-		insteadOfReturn()
-	} else {
-		doSomething()
+		// Good: whenever an error is indicated we return.
+		return
 	}
 	doSomething()
 
