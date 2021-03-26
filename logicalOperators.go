@@ -75,7 +75,7 @@ func logicalAndElseBranchAlwaysBad2() {
 	if errorSource() == ErrNone && someOtherCondition() {
 		doSomething()
 	} else {
-		// Bad: On error we may enter either branch, but neither one returns.
+		// Bad: there is no return statement at all.
 		insteadOfReturn()
 	}
 	doSomething()
@@ -85,7 +85,7 @@ func logicalAndElseBranchAlwaysBad2() {
 func logicalAndThenBranchGood() {
 
 	if someOtherCondition() && errorSource() != ErrNone {
-		// Good: whenever an error is indicated we return.
+		// Good: whenever an error is indicated we return (note errorSource() is not called until someOtherCondition() passes)
 		return
 	}
 	doSomething()
@@ -95,7 +95,7 @@ func logicalAndThenBranchGood() {
 func logicalAndElseBranchGood() {
 
 	if someOtherCondition() && errorSource() == ErrNone {
-		// Good: whenever an error is indicated we return.
+		// Good: whenever an error is indicated we return (note errorSource() is not called until someOtherCondition() passes)
 		doSomething()
 	} else {
 		return
@@ -154,7 +154,7 @@ func logicalOrThenBranchAlwaysBad() {
 func logicalOrThenBranchGood() {
 
 	if someOtherCondition() || errorSource() != ErrNone {
-		// Good: whenever an error is indicated we return.
+		// Good: whenever an error is indicated we return. (note errorSource() is not called until someOtherCondition() fails)
 		return
 	}
 	doSomething()
@@ -164,7 +164,7 @@ func logicalOrThenBranchGood() {
 func logicalOrElseBranchGood() {
 
 	if someOtherCondition() || errorSource() == ErrNone {
-		// Good: whenever an error is indicated we return.
+		// Good: whenever an error is indicated we return. (note errorSource() is not called until someOtherCondition() fails)
 		doSomething()
 	} else {
 		return
